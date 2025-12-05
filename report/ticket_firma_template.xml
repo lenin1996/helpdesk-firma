@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="ticket_firma_template">
+        <t t-call="web.external_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <h2>Ticket: <t t-esc="o.number or 'Sin número'"/></h2>
+                    <p><strong>Asunto:</strong> <t t-esc="o.name or ''"/></p>
+                    <hr/>
+                    <h3>Descripción</h3>
+                    <div t-raw="o.description or ''"/>
+                    <t t-if="o.firma">
+                        <hr/>
+                        <h3>Firma:</h3>
+                        <img t-att-src="'data:image/png;base64,%s' % (o.firma.decode() if isinstance(o.firma, bytes) else o.firma)" style="max-width:300px;"/>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

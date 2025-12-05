@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_envio_ticket_wizard" model="ir.ui.view">
+        <field name="name">helpdesk.envio.wizard.form</field>
+        <field name="model">helpdesk.envio.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Enviar Ticket Firmado">
+                <sheet>
+                    <group>
+                        <field name="ticket_id" invisible="1"/>
+                        <field name="partner_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="email_to" attrs="{'invisible': [('partner_ids','!=',False)]}"/>
+                        <field name="template_id" widget="selection"/>
+                        <field name="subject"/>
+                        <field name="body" nolabel="1"/>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Enviar" type="object" name="send_mail" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_send_ticket_wizard" model="ir.actions.act_window">
+        <field name="name">Enviar Ticket</field>
+        <field name="res_model">helpdesk.envio.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

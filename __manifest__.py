@@ -1,0 +1,21 @@
+{
+    'name': 'Helpdesk Firma (Enterprise)',
+    'summary': 'Firma digital y envío de tickets con vista tipo factura (Enterprise)',
+    'version': '1.1.0',
+    'author': 'Generated',
+    'license': 'AGPL-3',
+    'category': 'Helpdesk',
+    'depends': ['base', 'mail', 'helpdesk', 'web', 'sign'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/mail_template.xml',
+        'views/helpdesk_ticket_views.xml',
+        'wizard/envio_wizard_views.xml',
+        'wizard/firma_wizard_views.xml',
+        'report/report_ticket_firma.xml',
+        'report/ticket_firma_template.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}
