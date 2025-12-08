@@ -5,10 +5,9 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
 class HelpdeskEnvioWizard(models.TransientModel):
     _name = 'helpdesk.envio.wizard'
-    _inherit = 'mail.compose.message'
+    _inherit = 'mail.compose.message'  # Heredamos mail.compose.message
     _description = 'Enviar Ticket Firmado (Enterprise)'
 
     ticket_id = fields.Many2one(
@@ -30,7 +29,7 @@ class HelpdeskEnvioWizard(models.TransientModel):
             return res
 
         ticket = self.env['helpdesk.ticket'].browse(ticket_id)
-        
+
         template = False
         try:
             template = self.env.ref('helpdesk_firma.email_template_ticket_firmado')
@@ -64,7 +63,6 @@ class HelpdeskEnvioWizard(models.TransientModel):
     # ============================
     def _get_or_create_pdf(self):
         self.ensure_one()
-
         Attachment = self.env['ir.attachment'].sudo()
         name = f'Ticket_{self.ticket_id.id}.pdf'
 
@@ -100,6 +98,7 @@ class HelpdeskEnvioWizard(models.TransientModel):
 
         try:
             attachment = self._get_or_create_pdf()
+            # Usamos el campo attachment_ids heredado
             self.attachment_ids = [(4, attachment.id)]
         except Exception as e:
             _logger.exception('Error al generar PDF del ticket: %s', e)
