@@ -1,7 +1,7 @@
 {
     'name': 'Helpdesk Firma (Enterprise)',
     'summary': 'Firma digital y envío de tickets con vista tipo factura (Enterprise)',
-    'version': '1.1.0',
+    'version': '18.0.1.1.0',
     'author': 'Lenin Chela',
     'license': 'AGPL-3',
     'category': 'Helpdesk',
