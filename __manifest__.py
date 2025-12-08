@@ -1,11 +1,23 @@
 {
     'name': 'Helpdesk Firma (Enterprise)',
-    'summary': 'Firma digital y envío de tickets con vista tipo factura (Enterprise)',
+    'summary': 'Firma digital y envío de tickets con PDF tipo factura',
+    'description': """
+Extiende Helpdesk para permitir:
+
+- Firma digital del ticket desde el formulario
+- Generación de PDF firmado
+- Envío del ticket por correo con PDF adjunto
+- Integración con Odoo Sign (Enterprise)
+
+Diseñado para Odoo 18 Enterprise
+""",
     'version': '18.0.1.1.0',
     'author': 'Lenin Chela',
-    'license': 'AGPL-3',
+    'maintainer': 'Lenin Chela',
+    'website': 'https://github.com/lenin1996/helpdesk-firma',
+    'license': 'OPL-1',
     'category': 'Helpdesk',
-    'depends': ['base', 'mail', 'helpdesk', 'web', 'sign'],
+    'depends': ['mail','helpdesk','sign',],
     'data': [
         'security/ir.model.access.csv',
         'data/mail_template.xml',

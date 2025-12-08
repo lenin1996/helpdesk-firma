@@ -30,15 +30,12 @@ class HelpdeskEnvioWizard(models.TransientModel):
             return res
 
         ticket = self.env['helpdesk.ticket'].browse(ticket_id)
-
-        if ticket.estado_firma != 'firmado':
-            raise UserError(_('El ticket debe estar firmado antes de enviarse.'))
-
+        
         template = False
         try:
             template = self.env.ref('helpdesk_firma.email_template_ticket_firmado')
         except Exception:
-            template = False
+            pass
 
         partners = ticket.partner_id and [ticket.partner_id.id] or []
 
@@ -54,7 +51,7 @@ class HelpdeskEnvioWizard(models.TransientModel):
         return res
 
     # ============================
-    # ONCHANGE PLANTILLA
+    # ONCHANGE TEMPLATE
     # ============================
     @api.onchange('template_id')
     def _onchange_template_id(self):
@@ -63,10 +60,12 @@ class HelpdeskEnvioWizard(models.TransientModel):
             self.body = self.template_id.body_html
 
     # ============================
-    # PDF (reutilizable)
+    # PDF
     # ============================
     def _get_or_create_pdf(self):
-        Attachment = self.env['ir.attachment']
+        self.ensure_one()
+
+        Attachment = self.env['ir.attachment'].sudo()
         name = f'Ticket_{self.ticket_id.id}.pdf'
 
         attachment = Attachment.search([
@@ -95,6 +94,9 @@ class HelpdeskEnvioWizard(models.TransientModel):
     # ============================
     def send_mail(self, auto_commit=False):
         self.ensure_one()
+
+        if self.ticket_id.estado_firma != 'firmado':
+            raise UserError(_('El ticket debe estar firmado antes de enviarse.'))
 
         try:
             attachment = self._get_or_create_pdf()

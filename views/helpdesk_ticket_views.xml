@@ -17,6 +17,7 @@
                         string="Firmar"
                         type="action"
                         class="btn-primary"
+                        context="{'default_ticket_id': active_id}"
                         groups="helpdesk.group_helpdesk_user"
                         attrs="{
                             'invisible': [('estado_firma', '=', 'firmado')]
