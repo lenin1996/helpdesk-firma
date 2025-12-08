@@ -1,21 +1,39 @@
-from odoo import models, fields, api
-import base64, logging
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+import base64
+import logging
+
 _logger = logging.getLogger(__name__)
+
 
 class HelpdeskEnvioWizard(models.TransientModel):
     _name = 'helpdesk.envio.wizard'
     _inherit = 'mail.compose.message'
-    _description = 'Enviar Ticket Firmado (wizard tipo factura - Enterprise)'
+    _description = 'Enviar Ticket Firmado (Enterprise)'
 
-    ticket_id = fields.Many2one('helpdesk.ticket', string='Ticket', required=True)
+    ticket_id = fields.Many2one(
+        'helpdesk.ticket',
+        string='Ticket',
+        required=True,
+        readonly=True
+    )
 
+    # ============================
+    # DEFAULTS (como factura)
+    # ============================
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
-        ticket_id = self._context.get('default_ticket_id') or self._context.get('active_id')
+
+        ticket_id = self.env.context.get('default_ticket_id') or self.env.context.get('active_id')
         if not ticket_id:
             return res
+
         ticket = self.env['helpdesk.ticket'].browse(ticket_id)
+
+        if ticket.estado_firma != 'firmado':
+            raise UserError(_('El ticket debe estar firmado antes de enviarse.'))
+
         template = False
         try:
             template = self.env.ref('helpdesk_firma.email_template_ticket_firmado')
@@ -24,39 +42,64 @@ class HelpdeskEnvioWizard(models.TransientModel):
 
         partners = ticket.partner_id and [ticket.partner_id.id] or []
 
-        defaults = {
+        res.update({
             'ticket_id': ticket.id,
             'model': 'helpdesk.ticket',
             'res_id': ticket.id,
-            'partner_ids': [(6, 0, partners)] if partners else False,
-        }
-        defaults['subject'] = template.subject if template and template.subject else f"Ticket #{ticket.id}: {ticket.name or ''}"
-        if template:
-            defaults['template_id'] = template.id
+            'partner_ids': [(6, 0, partners)],
+            'template_id': template.id if template else False,
+            'subject': template.subject if template else f'Ticket #{ticket.id}',
+        })
 
-        res.update(defaults)
         return res
 
-    def _generate_pdf_attachment(self):
-        report_action = self.env.ref('helpdesk_firma.action_report_ticket_firma')
-        pdf_content, _ = report_action._render_qweb_pdf([self.ticket_id.id])
-        attach = self.env['ir.attachment'].create({
-            'name': f'Ticket_{self.ticket_id.id}.pdf',
+    # ============================
+    # ONCHANGE PLANTILLA
+    # ============================
+    @api.onchange('template_id')
+    def _onchange_template_id(self):
+        if self.template_id:
+            self.subject = self.template_id.subject
+            self.body = self.template_id.body_html
+
+    # ============================
+    # PDF (reutilizable)
+    # ============================
+    def _get_or_create_pdf(self):
+        Attachment = self.env['ir.attachment']
+        name = f'Ticket_{self.ticket_id.id}.pdf'
+
+        attachment = Attachment.search([
+            ('res_model', '=', 'helpdesk.ticket'),
+            ('res_id', '=', self.ticket_id.id),
+            ('name', '=', name),
+        ], limit=1)
+
+        if attachment:
+            return attachment
+
+        report = self.env.ref('helpdesk_firma.action_report_ticket_firma')
+        pdf_content, _ = report._render_qweb_pdf([self.ticket_id.id])
+
+        return Attachment.create({
+            'name': name,
             'type': 'binary',
             'datas': base64.b64encode(pdf_content),
             'res_model': 'helpdesk.ticket',
             'res_id': self.ticket_id.id,
             'mimetype': 'application/pdf',
         })
-        return attach
 
+    # ============================
+    # ENVÍO FINAL
+    # ============================
     def send_mail(self, auto_commit=False):
-        if not self.ticket_id:
-            return super(HelpdeskEnvioWizard, self).send_mail(auto_commit=auto_commit)
+        self.ensure_one()
+
         try:
-            attachment = self._generate_pdf_attachment()
-            if attachment:
-                self.attachment_ids = [(4, attachment.id)]
+            attachment = self._get_or_create_pdf()
+            self.attachment_ids = [(4, attachment.id)]
         except Exception as e:
-            _logger.exception('Failed to generate PDF attachment: %s', e)
-        return super(HelpdeskEnvioWizard, self).send_mail(auto_commit=auto_commit)
+            _logger.exception('Error al generar PDF del ticket: %s', e)
+
+        return super().send_mail(auto_commit=auto_commit)
