@@ -2,7 +2,7 @@
     'name': 'Helpdesk Firma (Enterprise)',
     'summary': 'Firma digital y envío de tickets con vista tipo factura (Enterprise)',
     'version': '1.1.0',
-    'author': 'Generated',
+    'author': 'Lenin Chela',
     'license': 'AGPL-3',
     'category': 'Helpdesk',
     'depends': ['base', 'mail', 'helpdesk', 'web', 'sign'],
