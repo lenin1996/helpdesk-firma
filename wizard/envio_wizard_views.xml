@@ -28,7 +28,11 @@
 
                         <!-- Adjuntos -->
                         <field name="attachment_ids"
-                               widget="many2many_binary"/>
+                        widget="many2many_binary"
+                        context="{
+                            'default_res_model': 'helpdesk.ticket',
+                            'default_res_id': ticket_id
+                        }"/>
                     </group>
                 </sheet>
 
@@ -44,5 +48,5 @@
             </form>
         </field>
     </record>
-    
+
 </odoo>
