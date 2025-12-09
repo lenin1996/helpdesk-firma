@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-
     <!-- ===============================
         HERENCIA VISTA TICKET
     ================================ -->
@@ -9,9 +8,7 @@
         <field name="model">helpdesk.ticket</field>
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
-
             <xpath expr="//header" position="inside">
-
                 <!-- Botón Firmar -->
                 <button name="%(action_firma_wizard)d"
                         string="Firmar"
@@ -22,7 +19,6 @@
                         attrs="{
                             'invisible': [('estado_firma', '=', 'firmado')]
                         }"/>
-
                 <!-- Botón Enviar -->
                 <button name="action_enviar_ticket"
                         string="Enviar Ticket"
@@ -32,9 +28,7 @@
                         attrs="{
                             'invisible': [('estado_firma', '!=', 'firmado')]
                         }"/>
-
             </xpath>
-
             <!-- Campos técnicos ocultos -->
             <xpath expr="//sheet" position="inside">
                 <group invisible="1">
@@ -42,11 +36,8 @@
                     <field name="firma"/>
                 </group>
             </xpath>
-
         </field>
     </record>
-
-
     <!-- ===============================
         ACTION WIZARD FIRMA
     ================================ -->
@@ -55,14 +46,11 @@
         <field name="res_model">helpdesk.firma.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-
         <!-- CONTEXTO CLAVE -->
         <field name="context">
             {'default_ticket_id': active_id}
         </field>
     </record>
-
-
     <!-- ===============================
         VISTA WIZARD FIRMA
     ================================ -->
@@ -70,26 +58,22 @@
         <field name="name">helpdesk.firma.wizard.form</field>
         <field name="model">helpdesk.firma.wizard</field>
         <field name="arch" type="xml">
-
             <form string="Firmar Ticket">
                 <group>
                     <field name="signature" widget="signature"/>
                     <field name="signed_by" readonly="1"/>
                     <field name="signed_on" readonly="1"/>
                 </group>
-
                 <footer>
                     <button name="action_confirm_firma"
                             string="Confirmar Firma"
                             type="object"
                             class="btn-primary"/>
-
                     <button string="Cancelar"
                             special="cancel"
                             class="btn-secondary"/>
                 </footer>
             </form>
-
         </field>
     </record>
 </odoo>

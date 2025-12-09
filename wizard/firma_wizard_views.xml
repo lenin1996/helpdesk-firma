@@ -9,7 +9,6 @@
                     <group>
                         <!-- Campo técnico requerido -->
                         <field name="ticket_id" invisible="1"/>
-
                         <field name="signature" widget="signature"/>
                         <field name="signed_by" readonly="1"/>
                         <field name="signed_on" readonly="1"/>

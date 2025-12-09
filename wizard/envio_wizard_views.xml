@@ -9,22 +9,18 @@
                     <group>
                         <field name="ticket_id" invisible="1"/>
                         <field name="composition_mode" invisible="1"/>
-
                         <field name="partner_ids"
                                 widget="many2many_tags"
                                 options="{'no_create': True}"/>
-
                         <field name="template_id"/>
                         <field name="subject"/>
                         <field name="body_html" nolabel="1"/>
-
                         <!-- Usamos attachment_ids heredado, no lo redefinimos -->
                         <field name="attachment_ids"
                                 widget="many2many_binary"
                                 context="{'default_res_model': 'helpdesk.ticket','default_res_id': ticket_id}"/>
                     </group>
                 </sheet>
-
                 <footer>
                     <button name="send_mail"
                             type="object"
