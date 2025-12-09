@@ -5,7 +5,7 @@
     'summary': 'Firma digital y envío de tickets con PDF',
     'author': 'Lenin Chela',
     'maintainer': 'Lenin Chela',
-    'website': 'https://github.com/lenin1996/helpdesk-firma',
+    'website': 'https://github.com/lenin1996/helpdesk_firma',
     'license': 'OPL-1',
     'category': 'Helpdesk',
     'depends': [
