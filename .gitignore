@@ -1,1 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Odoo cache
+*.log
+
+# SO
 .DS_Store
+Thumbs.db
