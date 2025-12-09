@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="email_template_ticket_firmado" model="mail.template">
+        <field name="name">Ticket firmado</field>
+
+        <!-- MODELO CORRECTO -->
+        <field name="model_id" ref="helpdesk.model_helpdesk_ticket"/>
+
+        <!-- ASUNTO -->
+        <field name="subject">
+            Ticket firmado: ${object.name}
+        </field>
+
+        <!-- REMITENTE -->
+        <field name="email_from">
+            ${(user.email_formatted or '') | safe}
+        </field>
+
+        <!-- IDIOMA -->
+        <field name="lang">
+            ${object.partner_id.lang or user.lang}
+        </field>
+
+        <!-- CUERPO -->
+        <field name="body_html" type="html">
+            <![CDATA[
+            <div>
+                <p>Estimado(a) ${object.partner_id.name or 'cliente'},</p>
+
+                <p>
+                    El ticket <strong>${object.name}</strong>
+                    ha sido <strong>firmado correctamente</strong>.
+                </p>
+
+                <p>
+                    Se adjunta el documento PDF con la firma.
+                </p>
+
+                <p>
+                    Saludos cordiales,<br/>
+                    ${user.name}
+                </p>
+            </div>
+            ]]>
+        </field>
+
+        <!-- BUENA PRÁCTICA -->
+        <field name="auto_delete" eval="True"/>
+
+    </record>
+</odoo>
