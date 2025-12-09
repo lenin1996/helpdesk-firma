@@ -17,6 +17,15 @@ class HelpdeskEnvioWizard(models.TransientModel):
         readonly=True
     )
 
+    # 🔧 Campo necesario para evitar conflicto de Many2many en Odoo 17+
+    attachment_ids = fields.Many2many(
+        'ir.attachment',
+        'helpdesk_envio_wizard_ir_attachment_rel',  # Nombre único de tabla
+        'wizard_id',
+        'attachment_id',
+        string='Attachments'
+    )
+
     # ============================
     # DEFAULTS (como factura)
     # ============================
@@ -98,7 +107,6 @@ class HelpdeskEnvioWizard(models.TransientModel):
 
         try:
             attachment = self._get_or_create_pdf()
-            # Usamos el campo attachment_ids heredado
             self.attachment_ids = [(4, attachment.id)]
         except Exception as e:
             _logger.exception('Error al generar PDF del ticket: %s', e)
