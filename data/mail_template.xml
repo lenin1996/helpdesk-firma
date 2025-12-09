@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
         <record id="email_template_ticket_firmado" model="mail.template">
             <field name="name">Ticket firmado</field>
 
@@ -49,5 +48,4 @@
             <field name="auto_delete" eval="True"/>
 
         </record>
-    </data>
 </odoo>

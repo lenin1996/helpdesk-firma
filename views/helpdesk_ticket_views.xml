@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
 
         <!-- ===============================
             HERENCIA VISTA TICKET
@@ -93,5 +92,4 @@
 
             </field>
         </record>
-    </data>
 </odoo>
