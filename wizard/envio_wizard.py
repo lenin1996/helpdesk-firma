@@ -17,10 +17,18 @@ class HelpdeskEnvioWizard(models.TransientModel):
         readonly=True
     )
 
-    # 🔧 Campo necesario para evitar conflicto de Many2many en Odoo 17+
+    # 🔸 Campos Many2many redefinidos para evitar conflictos de tabla en Odoo 17+
+    partner_ids = fields.Many2many(
+        'res.partner',
+        'helpdesk_envio_wizard_res_partner_rel',  # Tabla de relación única
+        'wizard_id',
+        'partner_id',
+        string='Recipients'
+    )
+
     attachment_ids = fields.Many2many(
         'ir.attachment',
-        'helpdesk_envio_wizard_ir_attachment_rel',  # Nombre único de tabla
+        'helpdesk_envio_wizard_ir_attachment_rel',  # Tabla de relación única
         'wizard_id',
         'attachment_id',
         string='Attachments'
