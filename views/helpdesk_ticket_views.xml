@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <!-- ===============================
-            HERENCIA VISTA TICKET
-        ================================ -->
         <record id="ticket_view_form_inherit_firma" model="ir.ui.view">
             <field name="name">helpdesk.ticket.form.inherit.firma</field>
             <field name="model">helpdesk.ticket</field>
@@ -39,9 +36,7 @@
                 </xpath>
             </field>
         </record>
-        <!-- ===============================
-            ACTION WIZARD FIRMA
-        ================================ -->
+        <!-- ACTION WIZARD FIRMA -->
         <record id="action_firma_wizard" model="ir.actions.act_window">
             <field name="name">Firmar Ticket</field>
             <field name="res_model">helpdesk.firma.wizard</field>
@@ -52,9 +47,7 @@
                 {'default_ticket_id': active_id}
             </field>
         </record>
-        <!-- ===============================
-            VISTA WIZARD FIRMA
-        ================================ -->
+        <!-- VISTA WIZARD FIRMA -->
         <record id="view_firma_wizard_form" model="ir.ui.view">
             <field name="name">helpdesk.firma.wizard.form</field>
             <field name="model">helpdesk.firma.wizard</field>
